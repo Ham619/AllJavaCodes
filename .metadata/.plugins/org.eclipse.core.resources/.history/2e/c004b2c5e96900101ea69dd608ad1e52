@@ -1,0 +1,122 @@
+package helloworld;
+
+
+import java.util.*;
+
+class InvalidPinException extends Exception {
+    public InvalidPinException(String message) {
+        super(message);
+    }
+}
+
+class InsufficientBalanceException extends Exception {
+    public InsufficientBalanceException(String message) {
+        super(message);
+    }
+}
+
+class Account {
+    int accountNumber;
+    int pin;
+    double balance;
+
+    public Account(int accountNumber, int pin, double balance) {
+        this.accountNumber = accountNumber;
+        this.pin = pin;
+        this.balance = balance;
+    }
+}
+
+public class Atm {
+    private static Map<Integer, Account> accounts = new HashMap<>();
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        
+        accounts.put(101, new Account(101, 1234, 5000));
+        accounts.put(102, new Account(102, 4321, 10000));
+
+        try {
+            System.out.print("Enter Account Number: ");
+            int accNo = sc.nextInt();
+
+            if (!accounts.containsKey(accNo)) {
+                System.out.println("Account does not exist.");
+                return;
+            }
+
+            Account acc = accounts.get(accNo);
+            boolean authenticated = false;
+
+            for (int i = 1; i <= 3; i++) {
+                System.out.print("Enter PIN: ");
+                int enteredPin = sc.nextInt();
+
+                try {
+                    if (enteredPin != acc.pin) {
+                        throw new InvalidPinException("Invalid PIN. Attempt " + i + " of 3.");
+                    }
+                    authenticated = true;
+                    break;
+                } catch (InvalidPinException e) {
+                    System.out.println(e.getMessage());
+                    if (i == 3) {
+                        System.out.println("Card blocked due to 3 failed attempts.");
+                        return;
+                    }
+                }
+            }
+
+            if (authenticated) {
+                int choice;
+                do {
+                    System.out.println("\n Welcome to ATM");
+                    System.out.println("1. Check Balance");
+                    System.out.println("2. Deposit");
+                    System.out.println("3. Withdraw");
+                    System.out.println("4. Exit");
+                    System.out.print("Enter your choice: ");
+                    choice = sc.nextInt();
+
+                    switch (choice) {
+                        case 1:
+                            System.out.println("Current Balance: " + acc.balance);
+                            break;
+                        case 2:
+                            System.out.print("Enter deposit amount: ");
+                            double deposit = sc.nextDouble();
+                            acc.balance += deposit;
+                            System.out.println(deposit + " deposited successfully.");
+                            break;
+                        case 3:
+                            System.out.print("Enter withdrawal amount: ");
+                            double withdraw = sc.nextDouble();
+                            try {
+                                if (withdraw > acc.balance) {
+                                    throw new InsufficientBalanceException("Insufficient balance!");
+                                }
+                                acc.balance -= withdraw;
+                                System.out.println(withdraw + " withdrawn successfully.");
+                            } catch (InsufficientBalanceException e) {
+                                System.out.println(e.getMessage());
+                            }
+                            break;
+                        case 4:
+                            System.out.println("Thank you for using the ATM.");
+                            break;
+                        default:
+                            System.out.println("Invalid choice.");
+                    }
+                } while (choice != 4);
+            }
+
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter numbers only.");
+        } finally {
+            System.out.println("Transaction log complete.");
+            sc.close();
+        }
+    }
+}
+

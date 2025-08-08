@@ -1,0 +1,70 @@
+package com.banking.module;
+
+import java.util.Scanner;
+
+public class BankMain {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        BankServiceImpl bank = new BankServiceImpl();
+
+        System.out.println("=== Welcome to Simple Banking System ===");
+
+        while (true) {
+            System.out.println("\n1. Create Account\n2. Deposit\n3. Withdraw\n4. Check Balance\n5. Exit");
+            System.out.print("Enter choice: ");
+            int choice = sc.nextInt();
+
+            if (choice == 5) break;
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Account Number: ");
+                    int accNo = sc.nextInt();
+                    sc.nextLine(); 
+                    System.out.print("Enter Name: ");
+                    String name = sc.nextLine();
+                    System.out.print("Enter Initial Balance: ");
+                    double balance = sc.nextDouble();
+                    System.out.print("Enter Account Type (1.Savings / 2.Current): ");
+                    int type = sc.nextInt();
+
+                    if (type == 1) {
+                        bank.addAccount(new SavingsAccount(accNo, name, balance));
+                    } else if (type == 2) {
+                        bank.addAccount(new CurrentAccount(accNo, name, balance));
+                    } else {
+                        System.out.println("Invalid account type!");
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("Enter Account Number: ");
+                    int depAcc = sc.nextInt();
+                    System.out.print("Enter Amount: ");
+                    double depAmt = sc.nextDouble();
+                    bank.deposit(depAcc, depAmt);
+                    break;
+
+                case 3:
+                    System.out.print("Enter Account Number: ");
+                    int witAcc = sc.nextInt();
+                    System.out.print("Enter Amount: ");
+                    double witAmt = sc.nextDouble();
+                    bank.withdraw(witAcc, witAmt);
+                    break;
+
+                case 4:
+                    System.out.print("Enter Account Number: ");
+                    int balAcc = sc.nextInt();
+                    bank.checkBalance(balAcc);
+                    break;
+
+                default:
+                    System.out.println("Invalid option!");
+            }
+        }
+
+        sc.close();
+        System.out.println("Thank you for using the banking system!");
+    }
+}

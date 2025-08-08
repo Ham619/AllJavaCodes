@@ -1,0 +1,71 @@
+package OopsExamples;
+
+//FullInheritanceExample.java
+
+//Base class (Parent)
+class Person {
+ String name;
+ int age;
+
+ // Constructor
+ public Person(String name, int age) {
+     this.name = name;
+     this.age = age;
+     System.out.println("Person constructor called.");
+ }
+
+ // Method
+ public void displayInfo() {
+     System.out.println("Name: " + name + ", Age: " + age);
+ }
+}
+
+//Derived class (Child) – Single Inheritance
+class Employee extends Person {
+ int employeeId;
+ double salary;
+
+ // Constructor with constructor chaining using super()
+ public Employee(String name, int age, int employeeId, double salary) {
+     super(name, age); // calling Person constructor
+     this.employeeId = employeeId;
+     this.salary = salary;
+     System.out.println("Employee constructor called.");
+ }
+
+ // Method Overriding
+ @Override
+ public void displayInfo() {
+     super.displayInfo(); // calling parent method
+     System.out.println("Employee ID: " + employeeId + ", Salary: ₹" + salary);
+ }
+}
+
+//Further Derived class – Multilevel Inheritance
+class Manager extends Employee {
+ String department;
+
+ public Manager(String name, int age, int employeeId, double salary, String department) {
+     super(name, age, employeeId, salary);
+     this.department = department;
+     System.out.println("Manager constructor called.");
+ }
+
+ @Override
+ public void displayInfo() {
+     super.displayInfo(); // calling Employee's displayInfo
+     System.out.println("Department: " + department);
+ }
+}
+
+//Main class
+public class InheritanceExample {
+ public static void main(String[] args) {
+     System.out.println("Creating Manager object...\n");
+
+     Manager m = new Manager("Amit Sharma", 40, 1001, 95000, "IT");
+
+     System.out.println("\nDisplaying Manager Info:");
+     m.displayInfo(); // Calls overridden method in Manager
+ }
+}

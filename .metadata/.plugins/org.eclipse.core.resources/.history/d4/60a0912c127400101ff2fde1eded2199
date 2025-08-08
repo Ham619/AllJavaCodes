@@ -1,0 +1,42 @@
+package OopsExamples;
+
+//AbstractionExample.java
+
+abstract class Vehicle {
+ // Abstract method (no body)
+ public abstract void start();
+
+ // Concrete method
+ public void fuelType() {
+     System.out.println("Most vehicles use petrol or diesel.");
+ }
+}
+
+class Car extends Vehicle {
+ @Override
+ public void start() {
+     System.out.println("Car starts with a key or push-button.");
+ }
+}
+
+class Bike extends Vehicle {
+ @Override
+ public void start() {
+     System.out.println("Bike starts with a kick or self-start.");
+ }
+}
+
+public class AbstractionExample {
+ public static void main(String[] args) {
+     Vehicle v1 = new Car();
+     Vehicle v2 = new Bike();
+
+     v1.start();       // Output: Car starts...
+     v1.fuelType();
+
+     System.out.println();
+
+     v2.start();       // Output: Bike starts...
+     v2.fuelType();
+ }
+}

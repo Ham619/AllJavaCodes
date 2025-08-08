@@ -1,0 +1,52 @@
+package JDBCExamples;
+
+import java.sql.*;
+
+public class ExampleOne {
+
+    public static void main(String[] args) {
+    	String url = "jdbc:mysql://localhost:3306/Hospital1"; 
+        String username = "root"; 
+        String password = "12345"; 
+
+        try {
+           
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            
+            Connection conn = DriverManager.getConnection(url, username, password);
+            System.out.println("Connected to the database.");
+            
+            
+//            Statement stmt = conn.createStatement();
+            
+            String sql = "INSERT INTO patient(name,age,disease) VALUES (?,?,?)";
+            
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            
+            pstmt.setString(1, "hammad");
+            pstmt.setInt(2, 23);
+            pstmt.setString(3, "fever");
+            
+            int rowsInserted = pstmt.executeUpdate();
+            
+            if(rowsInserted > 0) {
+            	System.out.println("Patient added sucessfully");
+            }
+
+//            stmt.executeUpdate(sql);
+            
+            System.out.println("Table 'student' created or already exists.");
+            
+            
+            conn.close();
+
+        } catch (ClassNotFoundException e) {
+            System.out.println("MySQL JDBC Driver not found.");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("SQL Exception occurred.");
+            e.printStackTrace();
+        }
+    }
+}

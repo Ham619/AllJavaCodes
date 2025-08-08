@@ -1,0 +1,123 @@
+package helloworld;
+
+
+import java.util.*;
+import java.util.Scanner;
+
+class InvalidPinException extends Exception {
+    public InvalidPinException(String message) {
+        super(message);
+    }
+}
+
+class InsufficientBalanceException extends Exception {
+    public InsufficientBalanceException(String message) {
+        super(message);
+    }
+}
+
+class Account {
+    int accountNumber;
+    int pin;
+    double balance;
+
+    public Account(int accountNumber, int pin, double balance) {
+        this.accountNumber = accountNumber;
+        this.pin = pin;
+        this.balance = balance;
+    }
+}
+
+public class Atm {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        
+        System.out.println("Register New User");
+        System.out.print("Enter Account Number: ");
+        int accNo = sc.nextInt();
+        System.out.print("Set PIN: ");
+        int pin = sc.nextInt();
+        System.out.print("Enter Initial Deposit: ");
+        double deposit = sc.nextDouble();
+
+        Account user = new Account(accNo, pin, deposit);
+        System.out.println("User registered successfully.\n");
+
+        try {
+            System.out.print("Enter Account Number to Login: ");
+            int enteredAccNo = sc.nextInt();
+
+            if (enteredAccNo != user.accountNumber) {
+                System.out.println("Account not found.");
+                return;
+            }
+
+            boolean authenticated = false;
+            for (int attempt = 1; attempt <= 3; attempt++) {
+                System.out.print("Enter your PIN: ");
+                int enteredPin = sc.nextInt();
+                try {
+                    if (enteredPin != user.pin) {
+                        throw new InvalidPinException("Invalid PIN. Attempt " + attempt + " of 3.");
+                    }
+                    authenticated = true;
+                    break;
+                } catch (InvalidPinException e) {
+                    System.out.println(e.getMessage());
+                    if (attempt == 3) {
+                        System.out.println("Card blocked after 3 failed attempts.");
+                        return;
+                    }
+                }
+            }
+
+            if (authenticated) {
+                int choice = 0;
+                while (choice != 4) {
+                    System.out.println("\nATM Menu");
+                    System.out.println("1. Check Balance");
+                    System.out.println("2. Deposit");
+                    System.out.println("3. Withdraw");
+                    System.out.println("4. Exit");
+                    System.out.print("Enter your choice: ");
+                    choice = sc.nextInt();
+
+                    if (choice == 1) {
+                        System.out.println("Current Balance: Rs." + user.balance);
+                    } else if (choice == 2) {
+                        System.out.print("Enter deposit amount: ");
+                        double amount = sc.nextDouble();
+                        user.balance += amount;
+                        System.out.println("Rs." + amount + " deposited successfully.");
+                    } else if (choice == 3) {
+                        System.out.print("Enter withdrawal amount: ");
+                        double amount = sc.nextDouble();
+                        try {
+                            if (amount > user.balance) {
+                                throw new InsufficientBalanceException("Insufficient balance.");
+                            }
+                            user.balance -= amount;
+                            System.out.println("Rs." + amount + " withdrawn successfully.");
+                        } catch (InsufficientBalanceException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    } else if (choice == 4) {
+                        System.out.println("Thank you for using ATM.");
+                    } else {
+                        System.out.println("Invalid choice. Try again.");
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            System.out.println("Transaction completed.");
+            sc.close();
+        }
+    }
+}
+
+

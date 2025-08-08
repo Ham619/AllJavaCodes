@@ -1,0 +1,102 @@
+package helloworld;
+
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+class Doctor {
+    private int licenseNumber;
+    private String name;
+    private String department;
+
+    public Doctor(int licenseNumber, String name, String department) {
+        this.licenseNumber = licenseNumber;
+        this.name = name;
+        this.department = department;
+    }
+
+    public int getLicenseNumber() {
+        return licenseNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Doctor ID: " + licenseNumber + ", Name: " + name + ", Department: " + department;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Doctor)) return false;
+        Doctor other = (Doctor) obj;
+        return this.licenseNumber == other.licenseNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(licenseNumber);
+    }
+}
+
+public class HospitalMap {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        HashMap<Integer, Doctor> doctorMap = new HashMap<>();
+        int choice;
+
+        do {
+            System.out.println("\n--- Hospital Doctor Management ---");
+            System.out.println("1. Register Doctor");
+            System.out.println("2. View All Doctors");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Doctor License Number (unique): ");
+                    int license = sc.nextInt();
+                    sc.nextLine();
+
+                    if (doctorMap.containsKey(license)) {
+                        System.out.println("Doctor with this license already exists.");
+                    } else {
+                        System.out.print("Enter Doctor Name: ");
+                        String name = sc.nextLine();
+
+                        System.out.print("Enter Department: ");
+                        String dept = sc.nextLine();
+
+                        Doctor newDoctor = new Doctor(license, name, dept);
+                        doctorMap.put(license, newDoctor);
+                        System.out.println("Doctor registered successfully.");
+                    }
+                    break;
+
+                case 2:
+                    if (doctorMap.isEmpty()) {
+                        System.out.println("No doctors registered.");
+                    } else {
+                        System.out.println("\nList of Registered Doctors:");
+                        for (Map.Entry<Integer, Doctor> entry : doctorMap.entrySet()) {
+                            System.out.println(entry.getValue());
+                        }
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("Exiting...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+
+        } while (choice != 3);
+
+        sc.close();
+    }
+}

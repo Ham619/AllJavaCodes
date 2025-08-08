@@ -1,0 +1,70 @@
+package helloworld;
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class Scoreboard {
+    public static void main(String[] args) {
+        HashMap<String, Integer> scores = new HashMap<>();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n--- Scoreboard Menu ---");
+            System.out.println("1. Add Player");
+            System.out.println("2. Update Score");
+            System.out.println("3. View Score");
+            System.out.println("4. Display All Scores");
+            System.out.println("5. Exit");
+
+            System.out.print("Choose option: ");
+            int choice = Integer.parseInt(scanner.nextLine());
+
+            if (choice == 1) {
+                System.out.print("Enter player name: ");
+                String newPlayer = scanner.nextLine();
+                if (scores.containsKey(newPlayer)) {
+                    System.out.println("Player already exists.");
+                } else {
+                    scores.put(newPlayer, 0);
+                    System.out.println("Player added with score 0.");
+                }
+
+            } else if (choice == 2) {
+                System.out.print("Enter player name: ");
+                String player = scanner.nextLine();
+                if (scores.containsKey(player)) {
+                    System.out.print("Enter new score: ");
+                    int newScore = Integer.parseInt(scanner.nextLine());
+                    scores.put(player, newScore);
+                    System.out.println("Score updated.");
+                } else {
+                    System.out.println("Player not found.");
+                }
+
+            } else if (choice == 3) {
+                System.out.print("Enter player name: ");
+                String player = scanner.nextLine();
+                if (scores.containsKey(player)) {
+                    System.out.println(player + "'s Score: " + scores.get(player));
+                } else {
+                    System.out.println("Player not found.");
+                }
+
+            } else if (choice == 4) {
+                System.out.println("All Player Scores:");
+                for (String player : scores.keySet()) {
+                    System.out.println(player + " → " + scores.get(player));
+                }
+
+            } else if (choice == 5) {
+                System.out.println("Exiting...");
+                scanner.close();
+                break;
+
+            } else {
+                System.out.println("Invalid choice.");
+            }
+        }
+    }
+}
+

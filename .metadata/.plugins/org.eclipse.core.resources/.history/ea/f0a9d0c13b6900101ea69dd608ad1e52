@@ -1,0 +1,14 @@
+package helloworld;
+
+public class data {
+    int id;
+    String name;
+}
+
+public class Student {
+    public static void main(String[] args) {
+        data s = new data(); 
+        System.out.println(s.id);   
+        System.out.println(s.name); 
+    }
+}

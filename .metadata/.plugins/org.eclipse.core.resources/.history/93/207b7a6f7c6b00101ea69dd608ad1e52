@@ -1,0 +1,139 @@
+package helloworld;
+
+import java.util.*;
+
+class Player {
+    private String name;
+    private int totalScore;
+    private int matchesPlayed;
+
+    public Player(String name) {
+        this.name = name;
+        this.totalScore = 0;
+        this.matchesPlayed = 0;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getTotalScore() {
+        return totalScore;
+    }
+
+    public int getMatchesPlayed() {
+        return matchesPlayed;
+    }
+
+    public void updateScore(int score) {
+        this.totalScore += score;
+        this.matchesPlayed++;
+    }
+
+    public double getAverageScore() {
+        if (matchesPlayed == 0) return 0;
+        return (double) totalScore / matchesPlayed;
+    }
+
+    public String toString() {
+        return name + " | Total Score: " + totalScore + " | Matches: " + matchesPlayed + " | Avg: " + String.format("%.2f", getAverageScore());
+    }
+}
+
+public class Scoreboard {
+    public static void main(String[] args) {
+        HashMap<String, Player> scoreboard = new HashMap<>();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n=== Scoreboard Menu ===");
+            System.out.println("1. Add Player");
+            System.out.println("2. Update Score");
+            System.out.println("3. View Player Stats");
+            System.out.println("4. Display All Scores");
+            System.out.println("5. Show Leaderboard");
+            System.out.println("6. Exit");
+            System.out.print("Choose option: ");
+
+            String input = scanner.nextLine();
+            int choice;
+            try {
+                choice = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Enter a valid number.");
+                continue;
+            }
+
+            if (choice == 1) {
+                System.out.print("Enter player name: ");
+                String name = scanner.nextLine();
+                if (scoreboard.containsKey(name)) {
+                    System.out.println("Player already exists.");
+                } else {
+                    scoreboard.put(name, new Player(name));
+                    System.out.println("Player added.");
+                }
+
+            } else if (choice == 2) {
+                System.out.print("Enter player name: ");
+                String name = scanner.nextLine();
+                if (scoreboard.containsKey(name)) {
+                    System.out.print("Enter score to add: ");
+                    try {
+                        int score = Integer.parseInt(scanner.nextLine());
+                        if (score < 0) {
+                            System.out.println("Score cannot be negative.");
+                        } else {
+                            scoreboard.get(name).updateScore(score);
+                            System.out.println("Score updated.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid score.");
+                    }
+                } else {
+                    System.out.println("Player not found.");
+                }
+
+            } else if (choice == 3) {
+                System.out.print("Enter player name: ");
+                String name = scanner.nextLine();
+                if (scoreboard.containsKey(name)) {
+                    System.out.println(scoreboard.get(name));
+                } else {
+                    System.out.println("Player not found.");
+                }
+
+            } else if (choice == 4) {
+                if (scoreboard.isEmpty()) {
+                    System.out.println("No players to display.");
+                } else {
+                    System.out.println("\n--- All Player Stats ---");
+                    for (Player p : scoreboard.values()) {
+                        System.out.println(p);
+                    }
+                }
+
+            } else if (choice == 5) {
+                if (scoreboard.isEmpty()) {
+                    System.out.println("No players in leaderboard.");
+                } else {
+                    List<Player> list = new ArrayList<>(scoreboard.values());
+                    list.sort((p1, p2) -> p2.getTotalScore() - p1.getTotalScore());
+                    System.out.println("\n--- Leaderboard ---");
+                    for (int i = 0; i < list.size(); i++) {
+                        System.out.println((i + 1) + ". " + list.get(i));
+                    }
+                }
+
+            } else if (choice == 6) {
+                System.out.println("Exiting...");
+                break;
+
+            } else {
+                System.out.println("Invalid choice. Try again.");
+            }
+        }
+
+        scanner.close();
+    }
+}

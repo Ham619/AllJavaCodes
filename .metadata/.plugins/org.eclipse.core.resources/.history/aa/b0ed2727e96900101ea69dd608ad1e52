@@ -1,0 +1,32 @@
+package helloworld;
+
+import java.util.Scanner;
+
+public class Atm {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int correctPin = 1234;
+
+        System.out.println("Welcome to the ATM");
+
+        try {
+            System.out.print("Enter your ATM PIN: ");
+            int enteredPin = sc.nextInt();
+
+            if (enteredPin == correctPin) {
+                System.out.println("PIN Verified. Access Granted.");
+               
+            } else {
+                throw new Exception("Incorrect PIN! Access Denied.");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            System.out.println("ransaction Succcsessfull. Thank you for using our ATM.");
+            sc.close();
+        }
+
+        sc.close();
+    }
+}

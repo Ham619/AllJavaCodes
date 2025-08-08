@@ -1,0 +1,67 @@
+package JDBCExamples;
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class HospitalPatientManagement {
+
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/HospitalDB";
+        String username = "root";
+        String password = "12345";
+
+        try (
+            Scanner scanner = new Scanner(System.in);
+            Connection conn = DriverManager.getConnection(url, username, password);
+        ) {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("Connected to the database.");
+
+            String sql = "INSERT INTO patient (name, age, disease, admission_date, doctor_assigned) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+
+            System.out.print("Enter number of patients to register: ");
+            int count = Integer.parseInt(scanner.nextLine());
+
+            for (int i = 1; i <= count; i++) {
+                System.out.println("\nEnter details for patient " + i + ":");
+
+                System.out.print("Name: ");
+                String name = scanner.nextLine();
+
+                System.out.print("Age: ");
+                int age = Integer.parseInt(scanner.nextLine());
+
+                System.out.print("Disease: ");
+                String disease = scanner.nextLine();
+
+                System.out.print("Admission Date (YYYY-MM-DD): ");
+                String dateStr = scanner.nextLine();
+
+                System.out.print("Doctor Assigned: ");
+                String doctor = scanner.nextLine();
+
+                pstmt.setString(1, name);
+                pstmt.setInt(2, age);
+                pstmt.setString(3, disease);
+                pstmt.setDate(4, Date.valueOf(dateStr)); 
+                pstmt.setString(5, doctor);
+
+                int rows = pstmt.executeUpdate();
+                if (rows > 0) {
+                    System.out.println("Patient " + name + " registered successfully.");
+                }
+            }
+
+        } catch (ClassNotFoundException e) {
+            System.out.println("MySQL JDBC Driver not found.");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("SQL Exception occurred.");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Error: Invalid input.");
+            e.printStackTrace();
+        }
+    }
+}

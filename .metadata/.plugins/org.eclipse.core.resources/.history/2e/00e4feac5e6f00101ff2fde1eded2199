@@ -1,0 +1,57 @@
+package JDBCExamples;
+
+import java.sql.*;
+import java.util.*;
+
+class Patient {
+    String name;
+    int age;
+    String disease;
+
+    public Patient(String name, int age, String disease) {
+        this.name = name;
+        this.age = age;
+        this.disease = disease;
+    }
+}
+
+public class ExampleOne {
+
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/Hospital1"; 
+        String username = "root"; 
+        String password = "12345"; 
+
+        // Creating sample data using Patient class
+        List<Patient> patients = new ArrayList<>();
+        patients.add(new Patient("Hammad", 23, "Fever"));
+        patients.add(new Patient("Sara", 28, "Cold"));
+        patients.add(new Patient("Ravi", 35, "Cough"));
+        patients.add(new Patient("Sneha", 40, "Diabetes"));
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, username, password);
+            System.out.println("Connected to the database.");
+
+            String sql = "INSERT INTO patient(name, age, disease) VALUES (?, ?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+
+            for (Patient p : patients) {
+                pstmt.setString(1, p.name);
+                pstmt.setInt(2, p.age);
+                pstmt.setString(3, p.disease);
+                pstmt.executeUpdate(); 
+                System.out.println("Inserted: " + p.name);
+            }
+
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            System.out.println("MySQL JDBC Driver not found.");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("SQL Exception occurred.");
+            e.printStackTrace();
+        }
+    }
+}

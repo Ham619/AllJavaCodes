@@ -1,0 +1,22 @@
+package helloworld;
+
+import java.util.TreeSet;
+
+public class TreeSetExamples {
+	
+	public static void main(String[] args) {
+		
+		TreeSet <String> names = new TreeSet<>();
+		
+		names.add("Rahul");
+		names.add("Ajay");
+		names.add("hammad");
+		
+		for(String name:names) {
+			System.out.println(name);
+		}
+		
+		
+	}
+
+}

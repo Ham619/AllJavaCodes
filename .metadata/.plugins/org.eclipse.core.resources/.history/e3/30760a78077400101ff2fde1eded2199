@@ -1,0 +1,14 @@
+package helloworld;
+
+public static class Test1 {
+
+	static void greet() {
+		System.out.println("Hello from static method");
+	}
+
+	public static void main(String[] args) {
+		greet();
+		Test1.greet();
+
+	}
+}

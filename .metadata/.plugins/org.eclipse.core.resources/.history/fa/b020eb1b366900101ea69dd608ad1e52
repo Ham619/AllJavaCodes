@@ -1,0 +1,37 @@
+package helloworld;
+
+class Employee12 {
+    int id;
+    String name;
+    double salary;
+
+    Employee12(int id, String name, double salary) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public String toString() {
+        return id + " - " + name + " - ₹" + salary;
+    }
+}
+
+public class Test1 {
+    public static void main(String[] args) {
+        Employee12[] employees = new Employee12[3];
+
+        employees[0] = new Employee12(1, "Rahul", 50000);
+        employees[1] = new Employee12(2, "Hammad", 70000);
+        employees[2] = new Employee12(3, "Sneha", 40000);
+
+       
+        java.util.Arrays.sort(employees, (a, b) -> Double.compare(a.salary, b.salary));
+
+    
+        System.out.println("Sorted by Salary:");
+        for (Employee12 e : employees) {
+            System.out.println(e);
+        }
+    }
+}
+
